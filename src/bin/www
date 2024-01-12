@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+const app = require("../app");
+const debug = require("debug")("madcamp-proj3-back:server");
+const http = require("http");
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+const port = normalizePort(process.env.PORT ?? "3000");
+app.set("port", port);
+
+app.listen(port, () => {
+  console.log(`Server running on http://0.0.0.0:${port}`);
+});
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
