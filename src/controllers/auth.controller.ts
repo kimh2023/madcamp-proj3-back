@@ -1,26 +1,35 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
-import { CatchAsyncCallerDto, catchAsync } from "../utils/catchAsync";
+import { type NextFunction, type Request, type Response } from "express";
+import { type RequestHandlerDto, catchAsync } from "src/utils/catchAsync";
 
-export const signup: CatchAsyncCallerDto = catchAsync(
+const signup: RequestHandlerDto = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     res.json("signup");
-  }
+  },
 );
 
-export const login: CatchAsyncCallerDto = catchAsync(
+const login: RequestHandlerDto = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     res.json("LOGIN");
-  }
+  },
 );
 
-export const logout: CatchAsyncCallerDto = catchAsync(
+const logout: RequestHandlerDto = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     res.json("logout");
-  }
+  },
 );
 
-export const refreshToken: CatchAsyncCallerDto = catchAsync(
+const refreshToken: RequestHandlerDto = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     res.json("refreshToken");
-  }
+  },
 );
+
+const authController = {
+  signup,
+  login,
+  logout,
+  refreshToken,
+};
+
+export default authController;

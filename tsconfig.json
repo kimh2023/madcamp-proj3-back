@@ -17,9 +17,8 @@
     "strictPropertyInitialization": false /* typeorm */,
     "removeComments": false /* for swagger */,
     "declaration": true,
-    "moduleDetection": "force",
     "types": ["express"]
   },
-  "include": ["src/**/*", ".eslintrc.js", "image_uploader/*"],
+  "include": ["src/**/*", ".eslintrc.js"],
   "exclude": ["node_modules"]
 }

@@ -1,16 +1,46 @@
-import { NextFunction, Request, Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 
-const createError = require("http-errors");
-const express = require("express");
-const path = require("path");
-const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const express = require("express");
+const createError = require("http-errors");
 const logger = require("morgan");
+const path = require("path");
+const authRouter = require("src/routes/auth.route");
+const searchRouter = require("src/routes/search.route");
+const usersRouter = require("src/routes/user.route");
 
-var indexRouter = require(path.join(__dirname, "routes/index"));
-var usersRouter = require(path.join(__dirname, "routes/users"));
+const options = {
+  definition: {
+    openapi: "3.1.0",
+    info: {
+      title: "LogRocket Express API with Swagger",
+      version: "0.1.0",
+      description:
+        "This is a simple CRUD API application made with Express and documented with Swagger",
+      license: {
+        name: "MIT",
+        url: "https://spdx.org/licenses/MIT.html",
+      },
+      contact: {
+        name: "LogRocket",
+        url: "https://logrocket.com",
+        email: "info@email.com",
+      },
+    },
+    servers: [
+      {
+        url: "http://localhost:3000",
+      },
+    ],
+  },
+  apis: ["src/routes/*.ts"],
+};
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+const specs = swaggerJsdoc(options);
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -22,8 +52,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
+app.use("/search", searchRouter);
 app.use("/users", usersRouter);
+app.use("/auth", authRouter);
+app.use("/api", swaggerUi.serve, swaggerUi.setup(specs));
 
 // catch 404 and forward to error handler
 app.use(function (req: Request, res: Response, next: NextFunction) {

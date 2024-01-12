@@ -1,3 +1,5 @@
 node_modules
 image_uploader/certs
 image_uploader/image_links/*
+.husky
+src/certs/*
