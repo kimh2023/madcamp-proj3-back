@@ -47,32 +47,19 @@ const signup = async (
   };
 };
 
-const verify = async (
-  email: string,
-  password: string,
-): Promise<AuthResponseDto> => {
-  // const userExisting = await UserRepository.findOne({ where: { email } });
-  // if (userExisting !== null) {
-  //   return { success: false, message: "Existing user." };
-  // }
-  // if (password.length < 8) {
-  //   return { success: false, message: "Wrong request format." };
-  // }
-  // const userTemplate = new User();
-  // const salt = createSalt();
-  // userTemplate.email = email;
-  // userTemplate.password = hashPassword(password, salt);
-  // userTemplate.salt = salt;
-  // const errors = await validate(userTemplate);
-  // if (errors.length > 0) {
-  //   return { success: false, message: "Wrong request format." };
-  // }
-  // const user = await UserRepository.save(userTemplate);
+const verify = async (token: string): Promise<AuthResponseDto> => {
+  const user = await UserRepository.findOneAndUpdate(
+    { verificationToken: token, isVerified: false },
+    { $set: { isVerified: true, verificationToken: null } },
+  );
+  if (user === null) {
+    return { success: false, message: "Wrong verification token." };
+  }
   return {
     success: true,
     message: "Successful signup",
-    // user: returnPartialUser(user),
-    // token: createJWT(user),
+    user: returnPartialUser(user as User),
+    token: createJWT(user as User),
   };
 };
 
@@ -119,6 +106,7 @@ const refresh = async (_id: string): Promise<AuthResponseDto> => {
 
 const authService = {
   signup,
+  verify,
   login,
   refresh,
 };
@@ -200,7 +188,7 @@ const sendVerificationEmail = async (
       subject: "Verify Your Email",
       text: `TO COMPLETE YOUR REGISTRATION,
 VERIFY YOUR EMAIL ADDRESS BY CLICKING ON THE LINK BELOW:
-${process.env.BACKEND_URL}/verify?token=${verificationToken}`,
+${process.env.BACKEND_URL}/auth/verify?token=${verificationToken}`,
       html: `<html>
       <head>
         <meta charset="UTF-8" />
@@ -270,7 +258,7 @@ ${process.env.BACKEND_URL}/verify?token=${verificationToken}`,
             </p>
           </div>
           <a
-            href="${process.env.BACKEND_URL}/verify?token=${verificationToken}"
+            href="${process.env.BACKEND_URL}/auth/verify?token=${verificationToken}"
             class="button"
             target="_blank"
             >VERIFY</a

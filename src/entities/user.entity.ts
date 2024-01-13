@@ -13,8 +13,8 @@ export class User {
   @Column({ nullable: true })
   verificationToken: string;
 
-  @Column({ default: false })
-  isVerified: boolean;
+  @Column({ type: "boolean", default: false })
+  isVerified = false;
 
   @Column()
   // @Length(5, 20)

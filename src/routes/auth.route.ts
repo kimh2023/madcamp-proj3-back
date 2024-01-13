@@ -5,6 +5,7 @@ import { auth } from "src/middleware/auth";
 const router = express.Router();
 
 router.post("/signup", authController.signup as RequestHandler);
+router.get("/verify", authController.verify as RequestHandler);
 router.post("/login", authController.login as RequestHandler);
 router.post("/logout", auth, authController.logout as RequestHandler);
 router.post("/refresh", auth, authController.refresh as RequestHandler);
