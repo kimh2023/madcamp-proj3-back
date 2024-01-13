@@ -31,6 +31,7 @@ module.exports = router;
  *   /search:
  *     post:
  *       summary: "이미지 검색용 API"
+ *       tags: [Search]
  *       requestBody:
  *         description: "이미지 검색용 API"
  *         required: true
