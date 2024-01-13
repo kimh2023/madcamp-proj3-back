@@ -10,6 +10,12 @@ export class User {
   @IsEmail()
   email: string;
 
+  @Column({ nullable: true })
+  verificationToken: string;
+
+  @Column({ default: false })
+  isVerified: boolean;
+
   @Column()
   // @Length(5, 20)
   password: string;

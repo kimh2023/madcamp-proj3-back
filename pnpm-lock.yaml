@@ -59,6 +59,9 @@ dependencies:
   fs:
     specifier: ^0.0.1-security
     version: 0.0.1-security
+  googleapis:
+    specifier: ^130.0.0
+    version: 130.0.0
   http-errors:
     specifier: ~1.6.3
     version: 1.6.3
@@ -80,6 +83,9 @@ dependencies:
   mysql2:
     specifier: ^3.6.5
     version: 3.7.0
+  nodemailer:
+    specifier: ^6.9.8
+    version: 6.9.8
   prettier:
     specifier: ^3.1.1
     version: 3.1.1
@@ -115,6 +121,9 @@ devDependencies:
   '@types/node':
     specifier: ^20.11.0
     version: 20.11.0
+  '@types/nodemailer':
+    specifier: ^6.4.14
+    version: 6.4.14
   '@typescript-eslint/eslint-plugin':
     specifier: ^6.17.0
     version: 6.18.1(@typescript-eslint/parser@6.18.1)(eslint@8.56.0)(typescript@5.3.3)
@@ -907,6 +916,12 @@ packages:
     dependencies:
       undici-types: 5.26.5
 
+  /@types/nodemailer@6.4.14:
+    resolution: {integrity: sha512-fUWthHO9k9DSdPCSPRqcu6TWhYyxTBg382vlNIttSe9M7XfsT06y0f24KHXtbnijPGGRIcVvdKHTNikOI6qiHA==}
+    dependencies:
+      '@types/node': 20.11.0
+    dev: true
+
   /@types/normalize-package-data@2.4.4:
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
     dev: true
@@ -1466,7 +1481,6 @@ packages:
       function-bind: 1.1.2
       get-intrinsic: 1.2.2
       set-function-length: 1.1.1
-    dev: true
 
   /call-me-maybe@1.0.2:
     resolution: {integrity: sha512-HpX65o1Hnr9HH25ojC1YGs7HCQLq0GCOibSaWER0eNpgJ/Z1MZv2mTc7+xh6WOPxbRVcmgbv4hGU+uSQ/2xFZQ==}
@@ -1874,7 +1888,6 @@ packages:
       get-intrinsic: 1.2.2
       gopd: 1.0.1
       has-property-descriptors: 1.0.1
-    dev: true
 
   /define-properties@1.2.1:
     resolution: {integrity: sha512-8QmQKqEASLd5nx0U1B1okLElbUuuttJ/AnYmRXbbbGDWh6uS208EjD4Xqq/I9wK7u0v6O08XhTWnt5XtEbR6Dg==}
@@ -2624,7 +2637,6 @@ packages:
 
   /function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
-    dev: true
 
   /function.prototype.name@1.1.6:
     resolution: {integrity: sha512-Z5kx79swU5P27WEayXM1tBi5Ze/lbIyiNgU3qyXUOf9b2rgXYyF9Dy9Cx+IQv/Lc8WCG6L82zwUPpSS9hGehIg==}
@@ -2681,7 +2693,6 @@ packages:
       has-proto: 1.0.1
       has-symbols: 1.0.3
       hasown: 2.0.0
-    dev: true
 
   /get-stream@6.0.1:
     resolution: {integrity: sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==}
@@ -2825,11 +2836,36 @@ packages:
       - supports-color
     dev: false
 
+  /googleapis-common@7.0.1:
+    resolution: {integrity: sha512-mgt5zsd7zj5t5QXvDanjWguMdHAcJmmDrF9RkInCecNsyV7S7YtGqm5v2IWONNID88osb7zmx5FtrAP12JfD0w==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      extend: 3.0.2
+      gaxios: 6.1.1
+      google-auth-library: 9.4.2
+      qs: 6.11.2
+      url-template: 2.0.8
+      uuid: 9.0.1
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+    dev: false
+
+  /googleapis@130.0.0:
+    resolution: {integrity: sha512-+ZSOowVv+vGBTueu1Ot9O7EqC0U4PS9l7fUjzc0ThCT4w4g+r78Vgn17q7eGBB5JMu4hxYC1hbbm1U/MCnYFdg==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      google-auth-library: 9.4.2
+      googleapis-common: 7.0.1
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+    dev: false
+
   /gopd@1.0.1:
     resolution: {integrity: sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA==}
     dependencies:
       get-intrinsic: 1.2.2
-    dev: true
 
   /graceful-readlink@1.0.1:
     resolution: {integrity: sha512-8tLu60LgxF6XpdbK8OW3FA+IfTNBn1ZHGHKF4KQbEeSkajYw5PlYJcKluntgegDPTg8UkHjpet1T82vk6TQ68w==}
@@ -2871,17 +2907,14 @@ packages:
     resolution: {integrity: sha512-VsX8eaIewvas0xnvinAe9bw4WfIeODpGYikiWYLH+dma0Jw6KHYqWiWfhQlgOVK8D6PvjubK5Uc4P0iIhIcNVg==}
     dependencies:
       get-intrinsic: 1.2.2
-    dev: true
 
   /has-proto@1.0.1:
     resolution: {integrity: sha512-7qE+iP+O+bgF9clE5+UoBFzE65mlBiVj3tKCrlNQ0Ogwm0BjpT/gK4SlLYDMybDh5I3TCTKnPPa0oMG7JDYrhg==}
     engines: {node: '>= 0.4'}
-    dev: true
 
   /has-symbols@1.0.3:
     resolution: {integrity: sha512-l3LCuF6MgDNwTDKkdYGEihYjt5pRPbEg46rtlmnSPlUbgmB8LOIrKJbYYFBSbnPaJexMKtiPO8hmeRjRz2Td+A==}
     engines: {node: '>= 0.4'}
-    dev: true
 
   /has-tostringtag@1.0.0:
     resolution: {integrity: sha512-kFjcSNhnlGV1kyoGk7OXKSawH5JOb/LzUc5w9B02hOTO0dfFRjbHQKvg1d6cf3HbeUmtU9VbbV3qzZ2Teh97WQ==}
@@ -2895,7 +2928,6 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       function-bind: 1.1.2
-    dev: true
 
   /highlight.js@10.7.3:
     resolution: {integrity: sha512-tzcUFauisWKNHaRkN4Wjl/ZA07gENAjFl3J/c480dprkGTg5EQstgaNFqBfUqCq54kZRIEcreTsAgF/m2quD7A==}
@@ -3829,6 +3861,11 @@ packages:
       whatwg-url: 5.0.0
     dev: false
 
+  /nodemailer@6.9.8:
+    resolution: {integrity: sha512-cfrYUk16e67Ks051i4CntM9kshRYei1/o/Gi8K1d+R34OIs21xdFnW7Pt7EucmVKA0LKtqUGNcjMZ7ehjl49mQ==}
+    engines: {node: '>=6.0.0'}
+    dev: false
+
   /normalize-package-data@2.5.0:
     resolution: {integrity: sha512-/5CMN3T0R4XTj4DcGaexo+roZSdSFW/0AOOTROrjxzCG1wrWXEsGbRKevjlIL+ZDE4sZlJr5ED4YW0yqmkK+eA==}
     dependencies:
@@ -3866,7 +3903,6 @@ packages:
 
   /object-inspect@1.13.1:
     resolution: {integrity: sha512-5qoj1RUiKOMsCCNLV1CBiPYE10sziTsnmNxkAI/rZhiD63CF7IqdFGC/XzjWjpSgLf0LxXX3bDFIh0E18f6UhQ==}
-    dev: true
 
   /object-keys@1.1.1:
     resolution: {integrity: sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==}
@@ -4151,6 +4187,13 @@ packages:
   /punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
+
+  /qs@6.11.2:
+    resolution: {integrity: sha512-tDNIz22aBzCDxLtVH++VnTfzxlfeK5CbqohpSqpJgj1Wg/cQbStNAz3NuqCs5vV+pjBsK4x4pN9HlVh7rcYRiA==}
+    engines: {node: '>=0.6'}
+    dependencies:
+      side-channel: 1.0.4
+    dev: false
 
   /qs@6.5.2:
     resolution: {integrity: sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==}
@@ -4440,7 +4483,6 @@ packages:
       get-intrinsic: 1.2.2
       gopd: 1.0.1
       has-property-descriptors: 1.0.1
-    dev: true
 
   /set-function-name@2.0.1:
     resolution: {integrity: sha512-tMNCiqYVkXIZgc2Hnoy2IvC/f8ezc5koaRFkCjrpWzGpCd3qbZXPzVy9MAZzK1ch/X0jvSkojys3oqJN0qCmdA==}
@@ -4509,7 +4551,6 @@ packages:
       call-bind: 1.0.5
       get-intrinsic: 1.2.2
       object-inspect: 1.13.1
-    dev: true
 
   /signal-exit@3.0.7:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
@@ -5126,6 +5167,10 @@ packages:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
     dependencies:
       punycode: 2.3.1
+
+  /url-template@2.0.8:
+    resolution: {integrity: sha512-XdVKMF4SJ0nP/O7XIPB0JwAEuT9lDIYnNsK8yGVe43y0AWoKeJNdv3ZNWh7ksJ6KqQFjOO6ox/VEitLnaVNufw==}
+    dev: false
 
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
