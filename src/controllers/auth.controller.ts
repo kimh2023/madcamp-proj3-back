@@ -7,7 +7,15 @@ const signup: RequestHandlerDto = catchAsync(
     const email: string = req.body.email;
     const password: string = req.body.password;
     const response = await authService.signup(email, password);
-    res.json(response);
+    res.status(response.success ? 200 : 400).json(response);
+  },
+);
+
+const verify: RequestHandlerDto = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const token: string = req.query.token as string;
+    const response = await authService.verify(token);
+    res.status(response.success ? 200 : 400).json(response);
   },
 );
 
@@ -16,7 +24,7 @@ const login: RequestHandlerDto = catchAsync(
     const email: string = req.body.email;
     const password: string = req.body.password;
     const response = await authService.login(email, password);
-    res.json(response);
+    res.status(response.success ? 200 : 400).json(response);
   },
 );
 
@@ -26,19 +34,20 @@ const logout: RequestHandlerDto = catchAsync(
   },
 );
 
-const refreshToken: RequestHandlerDto = catchAsync(
+const refresh: RequestHandlerDto = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const _id = (req as any).user as string;
-    const response = await authService.refreshToken(_id);
-    res.json(response);
+    const response = await authService.refresh(_id);
+    res.status(response.success ? 200 : 400).json(response);
   },
 );
 
 const authController = {
   signup,
+  verify,
   login,
   logout,
-  refreshToken,
+  refresh,
 };
 
 export default authController;
