@@ -1,10 +1,16 @@
 import { type Board } from "src/entities/board.entity";
 import { BoardRepository, UserRepository } from "src/repositories";
-import { type BoardResponseDto } from "src/types/board.types";
+import {
+  type NewBoardDto,
+  type BoardResponseDto,
+  type BoardRequestDto,
+} from "src/types/board.types";
+
+import { returnPartialPins } from "./pin.service";
 
 const createBoard = async (
   userId: number,
-  newBoard: Partial<Board>,
+  newBoard: NewBoardDto,
 ): Promise<BoardResponseDto> => {
   if (newBoard.name === undefined) {
     return { success: false, message: "Wrong request format." };
@@ -16,7 +22,8 @@ const createBoard = async (
     return { success: false, message: "No such user." };
   }
   newBoard.user = user;
-  const board = await BoardRepository.save(newBoard);
+  const board: Board = BoardRepository.create(newBoard);
+  await BoardRepository.save(board);
   return {
     success: true,
     message: "Successful board creation",
@@ -37,13 +44,13 @@ const getBoard = async (_id: number): Promise<BoardResponseDto> => {
     success: true,
     message: "Board retrieved",
     board: returnPartialBoard(board),
-    pins: returnPins(board),
+    pins: returnPartialPins(board),
   };
 };
 
 const updateBoard = async (
   _id: number,
-  updatedBoard: Partial<Board>,
+  updatedBoard: BoardRequestDto,
 ): Promise<BoardResponseDto> => {
   const board = await BoardRepository.findOne({
     where: { _id },
@@ -57,19 +64,18 @@ const updateBoard = async (
     success: true,
     message: "Board updated",
     board: returnPartialBoard({ ...board, ...updatedBoard }),
-    pins: returnPins({ ...board, ...updatedBoard }),
+    pins: returnPartialPins({ ...board, ...updatedBoard }),
   };
 };
 
 const deleteBoard = async (_id: number): Promise<BoardResponseDto> => {
   const board = await BoardRepository.findOne({
     where: { _id },
-    relations: ["pins"],
   });
   if (board === null) {
     return { success: false, message: "No such board." };
   }
-  const deleteResult = await UserRepository.delete({ _id });
+  const deleteResult = await BoardRepository.delete({ _id });
   return {
     success: true,
     message: "Board deleted",
@@ -82,17 +88,5 @@ const boardService = { createBoard, getBoard, updateBoard, deleteBoard };
 export default boardService;
 
 export const returnPartialBoard = (board: Board) => {
-  return { _id: board._id, name: board.name };
-};
-
-const returnPins = (board: Board) => {
-  return board.pins.map((pin) => ({
-    _id: pin._id,
-    name: pin.product.name,
-    price: pin.product.price,
-    rating: pin.product.rating,
-    image: pin.product.image,
-    link: pin.product.link,
-    boardId: board._id,
-  }));
+  return { id: board._id, name: board.name };
 };

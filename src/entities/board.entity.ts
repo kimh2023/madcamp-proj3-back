@@ -22,6 +22,6 @@ export class Board {
   pins: Pin[];
 
   @ManyToOne(() => User, (user) => user.boards, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "_id" })
+  @JoinColumn({ name: "userId" })
   user: User;
 }

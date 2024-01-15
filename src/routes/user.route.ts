@@ -18,7 +18,7 @@ module.exports = router;
  *   name: "User"
  *   description: "사용자 관련 API"
  * paths:
- *   /users/:userId:
+ *   /users/{userId}:
  *     get:
  *       summary: "사용자 정보 가져오는 API"
  *       tags: [User]

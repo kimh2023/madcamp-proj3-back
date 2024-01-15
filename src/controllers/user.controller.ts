@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from "express";
-import { type User } from "src/entities/user.entity";
 import userService from "src/services/user.service";
+import { type UserRequestDto } from "src/types/user.types";
 import { type RequestHandlerDto, catchAsync } from "src/utils/catchAsync";
 
 const getUser: RequestHandlerDto = catchAsync(
@@ -16,7 +16,7 @@ const updateUser: RequestHandlerDto = catchAsync(
     const _id = Number(req.params.userId);
     const response = await userService.updateUser(
       _id,
-      req.body as Partial<User>,
+      req.body as UserRequestDto,
     );
     res.json(response);
   },

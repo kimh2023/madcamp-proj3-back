@@ -29,11 +29,12 @@ export class User {
   @IsEmail()
   email: string;
 
-  @Column({ default: "" })
+  @Column({ nullable: true, default: "" })
   name: string;
 
   @Column({
     type: "enum",
+    nullable: true,
     enum: InterestType,
     default: InterestType.Technology,
   })
@@ -63,6 +64,6 @@ export class User {
   type: UserType;
 
   @OneToMany(() => Board, (board) => board.user, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "_id" })
+  @JoinColumn({ name: "boardId" })
   boards: Board[];
 }

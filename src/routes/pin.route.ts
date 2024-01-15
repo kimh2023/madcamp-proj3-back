@@ -1,79 +1,79 @@
 import express from "express";
-import boardController from "src/controllers/board.controller";
+import pinController from "src/controllers/pin.controller";
 import { auth } from "src/middleware/auth";
 
 const router = express.Router();
 
-router.route("/").post(auth, boardController.createBoard);
+router.route("/").post(auth, pinController.createPin);
 
 router
-  .route("/:boardId")
-  .get(auth, boardController.getBoard)
-  .patch(auth, boardController.updateBoard)
-  .delete(auth, boardController.deleteBoard);
+  .route("/:pinId")
+  .get(auth, pinController.getPin)
+  .patch(auth, pinController.updatePin)
+  .delete(auth, pinController.deletePin);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: "Board"
- *   description: "보드(핀 묶음) 관련 API"
+ *   name: "Pin"
+ *   description: "핀 관련 API"
  * paths:
- *   /boards:
+ *   /boards/{boardId}/pins:
  *     post:
- *       summary: "보드 만드는 API"
- *       tags: [Board]
+ *       summary: "핀 만드는 API"
+ *       tags: [Pin]
  *       requestBody:
  *         description: "이미지 검색용 API"
  *         required: true
  *         content:
  *           application/json:
  *             schema:
- *               $ref: "#/components/schemas/BoardRequest"
+ *               $ref: "#/components/schemas/PinRequestPost"
  *       responses:
  *         200:
  *           description: "성공적인 응답"
  *           content:
  *             application/json:
  *               schema:
- *                 $ref: "#/components/schemas/BoardResponse"
- *   /boards/{boardId}:
+ *                 $ref: "#/components/schemas/PinResponse"
+ *   /boards/{boardId}/pins/{pinId}:
  *     get:
- *       summary: "보드 정보 가져오는 API"
- *       tags: [Board]
+ *       summary: "핀 정보 가져오는 API"
+ *       tags: [Pin]
  *       responses:
  *         200:
  *           description: "성공적인 응답"
  *           content:
  *             application/json:
  *               schema:
- *                 $ref: "#/components/schemas/BoardResponse"
+ *                 $ref: "#/components/schemas/PinResponse"
  *     patch:
- *       summary: "보드 정보 수정하는 API"
- *       tags: [Board]
+ *       summary: "핀 정보 수정하는 API"
+ *       tags: [Pin]
  *       requestBody:
  *         description: "이미지 검색용 API"
  *         required: true
  *         content:
  *           application/json:
  *             schema:
- *               $ref: "#/components/schemas/BoardRequest"
+ *               $ref: "#/components/schemas/PinRequestPatch"
  *       responses:
  *         200:
  *           description: "성공적인 응답"
  *           content:
  *             application/json:
  *               schema:
- *                 $ref: "#/components/schemas/BoardResponse"
+ *                 $ref: "#/components/schemas/PinResponse"
  *     delete:
- *       summary: "보드 삭제하는 API"
- *       tags: [Board]
+ *       summary: "핀 삭제하는 API"
+ *       tags: [Pin]
  *       responses:
  *         200:
  *           description: "성공적인 응답"
  *           content:
  *             application/json:
  *               schema:
- *                 $ref: "#/components/schemas/BoardResponse"
+ *                 $ref: "#/components/schemas/PinResponse"
  */
