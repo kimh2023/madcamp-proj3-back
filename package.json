@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env GOOGLE_APPLICATION_CREDENTIALS=/Users/hyuna/Desktop/madcamp-proj3-back/image_uploader/certs/august-oarlock-410522-794896e86aff.json NODE_PATH=./ NODE_ENV=dev SYNCHRONIZE=false ts-node ./src/bin/www",
-    "sync": "cross-env GOOGLE_APPLICATION_CREDENTIALS=/Users/hyuna/Desktop/madcamp-proj3-back/image_uploader/certs/august-oarlock-410522-794896e86aff.json NODE_PATH=./ NODE_ENV=dev SYNCHRONIZE=true ts-node ./src/bin/www"
+    "start": "cross-env GOOGLE_APPLICATION_CREDENTIALS=./image_uploader/certs/august-oarlock-410522-794896e86aff.json NODE_PATH=./ NODE_ENV=dev SYNCHRONIZE=false ts-node ./src/bin/www",
+    "sync": "cross-env GOOGLE_APPLICATION_CREDENTIALS=./image_uploader/certs/august-oarlock-410522-794896e86aff.json NODE_PATH=./ NODE_ENV=dev SYNCHRONIZE=true ts-node ./src/bin/www"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.7.0",
@@ -29,7 +29,6 @@
     "http-errors": "~1.6.3",
     "jade": "^1.11.0",
     "jsonwebtoken": "^9.0.2",
-    "mongodb": "^6.3.0",
     "morgan": "~1.9.1",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.6.5",

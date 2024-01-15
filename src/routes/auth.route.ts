@@ -44,6 +44,29 @@ module.exports = router;
  *             application/json:
  *               schema:
  *                 $ref: "#/components/schemas/AuthResult"
+ *   /auth/verify:
+ *     post:
+ *       summary: "email verification API"
+ *       tags: [Auth]
+ *       requestBody:
+ *         description: "email verification API"
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: email verification token
+ *       responses:
+ *         200:
+ *           description: "성공적인 응답"
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: "#/components/schemas/AuthResult"
+ *
  *   /auth/login:
  *     post:
  *       summary: "login API"

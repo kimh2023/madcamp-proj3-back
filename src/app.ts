@@ -1,19 +1,24 @@
+import "./env";
 import { type NextFunction, type Request, type Response } from "express";
+import path from "path";
 
+import { initData } from "./AppDataInit";
 import { AppDataSource } from "./AppDataSource";
-import { UserRepository } from "./repositories";
+import {
+  BoardRepository,
+  PinRepository,
+  ProductRepository,
+  UserRepository,
+} from "./repositories";
 
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const express = require("express");
 const createError = require("http-errors");
 const logger = require("morgan");
-const path = require("path");
 const authRouter = require("src/routes/auth.route");
 const searchRouter = require("src/routes/search.route");
 const usersRouter = require("src/routes/user.route");
-
-require("dotenv").config({ path: path.join(__dirname, ".env") });
 
 const options = {
   definition: {
@@ -65,15 +70,17 @@ app.use("/api", swaggerUi.serve, swaggerUi.setup(specs));
 AppDataSource.initialize()
   .then(async () => {
     if (process.env.SYNCHRONIZE === "true") {
-      await UserRepository.clear();
-      // initPlanData()
-      //   .then(() => {
-      //     console.log('Data Source has been MIGRATED!');
-      //   })
-      //   .catch(err => {
-      //     console.error('Data Source migrations had the error: ', err);
-      //   });
-      console.log("Data Source has been CLEARED!");
+      await PinRepository.delete({});
+      await ProductRepository.delete({});
+      await BoardRepository.delete({});
+      await UserRepository.delete({});
+      initData()
+        .then(() => {
+          console.log("Data Source has been CLEARED!");
+        })
+        .catch((err) => {
+          console.error("Data Source clearing had the error: ", err);
+        });
     } else {
       console.log("Data Source has been INITIALIZED!");
     }
