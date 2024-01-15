@@ -15,119 +15,80 @@ module.exports = router;
 /**
  * @swagger
  * tags:
- *   name: "Auth"
- *   description: "로그인 용 API"
+ *   name: Auth
+ *   description: API for Authentication
  * paths:
  *   /auth/signup:
  *     post:
- *       summary: "signup API"
+ *       summary: Signup API
  *       tags: [Auth]
  *       requestBody:
- *         description: "signup API"
  *         required: true
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 email:
- *                   type: string
- *                   format: email
- *                   description: must be unique
- *                 password:
- *                   type: string
- *                   description: must be at least 8 characters
+ *               $ref: "#/components/schemas/AuthRequest"
  *       responses:
  *         200:
- *           description: "성공적인 응답"
+ *           description: Successful response
  *           content:
  *             application/json:
  *               schema:
- *                 $ref: "#/components/schemas/AuthResult"
+ *                 $ref: "#/components/schemas/AuthResponse"
+ *
  *   /auth/verify:
- *     post:
- *       summary: "email verification API"
+ *     get:
+ *       summary: Email Verification API
  *       tags: [Auth]
- *       requestBody:
- *         description: "email verification API"
- *         required: true
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 token:
- *                   type: string
- *                   description: email verification token
+ *       parameters:
+ *         - in: query
+ *           name: token
+ *           required: true
+ *           description: Email verification token
+ *           schema:
+ *             type: string
  *       responses:
  *         200:
- *           description: "성공적인 응답"
+ *           description: Successful response
  *           content:
  *             application/json:
  *               schema:
- *                 $ref: "#/components/schemas/AuthResult"
+ *                 $ref: "#/components/schemas/AuthResponse"
  *
  *   /auth/login:
  *     post:
- *       summary: "login API"
+ *       summary: Login API
  *       tags: [Auth]
  *       requestBody:
- *         description: "login API"
  *         required: true
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 email:
- *                   type: string
- *                   format: email
- *                 password:
- *                   type: string
- *                   description: must be at least 8 characters
+ *               $ref: "#/components/schemas/AuthRequest"
  *       responses:
  *         200:
- *           description: "성공적인 응답"
+ *           description: Successful response
  *           content:
  *             application/json:
  *               schema:
- *                 $ref: "#/components/schemas/AuthResult"
+ *                 $ref: "#/components/schemas/AuthResponse"
  *
  *   /auth/refresh:
  *     post:
- *       summary: "refresh API"
+ *       summary: Refresh API
  *       tags: [Auth]
- *       requestBody:
- *         description: "refresh API"
- *         required: true
+ *       parameters:
+ *         - in: header
+ *           name: Authorization
+ *           required: true
+ *           description: Bearer token for authentication
+ *           schema:
+ *             type: string
  *       responses:
  *         200:
- *           description: "성공적인 응답"
+ *           description: Successful response
  *           content:
  *             application/json:
  *               schema:
- *                 $ref: "#/components/schemas/AuthResult"
- *
- * components:
- *   schemas:
- *     AuthResult:
- *       type: object
- *       properties:
- *         success:
- *           type: boolean
- *         message:
- *           type: string
- *           description: describes status of operation
- *         user:
- *           type: object
- *           properties:
- *             id:
- *               type: number
- *               description: user id
- *             email:
- *               type: string
- *               format: email
- *         token:
- *           type: string
- *           description: jwt token for authentication
+ *                 $ref: "#/components/schemas/AuthResponse"
  */

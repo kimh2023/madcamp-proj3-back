@@ -17,6 +17,7 @@ const express = require("express");
 const createError = require("http-errors");
 const logger = require("morgan");
 const authRouter = require("src/routes/auth.route");
+const boardRouter = require("src/routes/board.route");
 const searchRouter = require("src/routes/search.route");
 const usersRouter = require("src/routes/user.route");
 
@@ -44,7 +45,7 @@ const options = {
       },
     ],
   },
-  apis: ["src/routes/*.ts"],
+  apis: ["src/routes/*.ts", "src/types/*.ts"],
 };
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
@@ -63,6 +64,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/search", searchRouter);
+app.use("/boards", boardRouter);
 app.use("/users", usersRouter);
 app.use("/auth", authRouter);
 app.use("/api", swaggerUi.serve, swaggerUi.setup(specs));

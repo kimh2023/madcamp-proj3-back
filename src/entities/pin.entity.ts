@@ -8,10 +8,10 @@ export class Pin {
   @PrimaryGeneratedColumn()
   _id: number;
 
-  @ManyToOne(() => Product, (product) => product.pin, { onDelete: "CASCADE" })
+  @ManyToOne(() => Product, (product) => product.pins, { onDelete: "CASCADE" })
   product: Product;
 
-  @ManyToOne(() => Board, (board) => board.pin, { onDelete: "CASCADE" })
+  @ManyToOne(() => Board, (board) => board.pins, { onDelete: "CASCADE" })
   board: Board;
 
   @Column()

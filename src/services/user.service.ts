@@ -1,10 +1,12 @@
 import { validate } from "class-validator";
 import { type InterestType, type User } from "src/entities/user.entity";
 import { UserRepository } from "src/repositories";
+import { type UserResponseDto } from "src/types/user.types";
 
 import { createJWT, createSalt, hashPassword } from "./auth.service";
+import { returnPartialBoard } from "./board.service";
 
-const createUser = async (newUser: Partial<User>) => {
+const createUser = async (newUser: Partial<User>): Promise<UserResponseDto> => {
   if (
     newUser.email === undefined ||
     newUser.password === undefined ||
@@ -36,7 +38,7 @@ const createUser = async (newUser: Partial<User>) => {
   };
 };
 
-const getUser = async (_id: number) => {
+const getUser = async (_id: number): Promise<UserResponseDto> => {
   const user = await UserRepository.findOne({
     where: { _id },
     relations: ["boards", "boards"],
@@ -53,7 +55,10 @@ const getUser = async (_id: number) => {
   };
 };
 
-const updateUser = async (_id: number, updatedUser: Partial<User>) => {
+const updateUser = async (
+  _id: number,
+  updatedUser: Partial<User>,
+): Promise<UserResponseDto> => {
   const user = await UserRepository.findOne({
     where: { _id },
   });
@@ -69,7 +74,7 @@ const updateUser = async (_id: number, updatedUser: Partial<User>) => {
   };
 };
 
-const deleteUser = async (_id: number) => {
+const deleteUser = async (_id: number): Promise<UserResponseDto> => {
   const user = await UserRepository.findOne({
     where: { _id },
   });
@@ -81,7 +86,6 @@ const deleteUser = async (_id: number) => {
     success: true,
     message: "User deleted",
     user: returnPartialUser(user),
-    boards: returnBoards(user),
   };
 };
 
@@ -90,7 +94,12 @@ const userService = { createUser, getUser, updateUser, deleteUser };
 export default userService;
 
 export const returnPartialUser = (user: User) => {
-  return { id: user._id, email: user.email, name: user.name };
+  return {
+    _id: user._id,
+    email: user.email,
+    name: user.name,
+    interest: user.interest,
+  };
 };
 
 const returnCompleteUser = (user: User) => {
@@ -101,5 +110,5 @@ const returnCompleteUser = (user: User) => {
 };
 
 const returnBoards = (user: User) => {
-  return user.boards;
+  return user.boards.map((board) => returnPartialBoard(board));
 };

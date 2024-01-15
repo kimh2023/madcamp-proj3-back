@@ -19,7 +19,7 @@ export class Board {
   name: string;
 
   @OneToMany(() => Pin, (pin) => pin.board, { onDelete: "CASCADE" })
-  pin: Pin[];
+  pins: Pin[];
 
   @ManyToOne(() => User, (user) => user.boards, { onDelete: "CASCADE" })
   @JoinColumn({ name: "_id" })
