@@ -1,10 +1,10 @@
+import { type User } from "src/entities/user.entity";
+
 import { type PartialUserDto } from "./user.types";
 
-export interface AuthResponseDto {
-  success: boolean;
-  message: string;
-  user?: PartialUserDto;
-  token?: string;
+export interface AuthRequestDto extends Partial<User> {
+  email: string;
+  password: string;
 }
 
 /**
@@ -20,6 +20,13 @@ export interface AuthResponseDto {
  *         password:
  *           type: string
  */
+
+export interface AuthResponseDto {
+  success: boolean;
+  message: string;
+  user?: PartialUserDto;
+  token?: string;
+}
 
 /**
  * @swagger

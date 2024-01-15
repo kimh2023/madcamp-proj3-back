@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from "express";
-import { type Board } from "src/entities/board.entity";
 import boardService from "src/services/board.service";
+import { type BoardRequestDto, type NewBoardDto } from "src/types/board.types";
 import { type RequestHandlerDto, catchAsync } from "src/utils/catchAsync";
 
 const createBoard: RequestHandlerDto = catchAsync(
@@ -8,7 +8,7 @@ const createBoard: RequestHandlerDto = catchAsync(
     const userId = (req as any).user as number;
     const response = await boardService.createBoard(
       userId,
-      req.body as Partial<Board>,
+      req.body as NewBoardDto,
     );
     res.json(response);
   },
@@ -27,7 +27,7 @@ const updateBoard: RequestHandlerDto = catchAsync(
     const _id = Number(req.params.boardId);
     const response = await boardService.updateBoard(
       _id,
-      req.body as Partial<Board>,
+      req.body as BoardRequestDto,
     );
     res.json(response);
   },

@@ -1,14 +1,14 @@
+import { type User } from "src/entities/user.entity";
+
 import { type PartialPinDto } from "./pin.types";
 
-export interface BoardResponseDto {
-  success: boolean;
-  message: string;
-  board?: PartialBoardDto;
-  pins?: PartialPinDto[];
+export interface NewBoardDto {
+  name: string;
+  user: User;
 }
 
 export interface PartialBoardDto {
-  _id: number;
+  id: number;
   name: string;
 }
 
@@ -19,13 +19,17 @@ export interface PartialBoardDto {
  *     PartialBoardDto:
  *       type: object
  *       properties:
- *         _id:
+ *         id:
  *           type: number
  *           description: Board ID
  *         name:
  *           type: string
  *           description: Board name
  */
+
+export interface BoardRequestDto {
+  name: string;
+}
 
 /**
  * @swagger
@@ -38,6 +42,13 @@ export interface PartialBoardDto {
  *           type: string
  *           description: Board name
  */
+
+export interface BoardResponseDto {
+  success: boolean;
+  message: string;
+  board?: PartialBoardDto;
+  pins?: PartialPinDto[];
+}
 
 /**
  * @swagger

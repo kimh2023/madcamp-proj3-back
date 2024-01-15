@@ -8,15 +8,18 @@ import type SMTPTransport from "nodemailer/lib/smtp-transport";
 import * as path from "path";
 import { type User } from "src/entities/user.entity";
 import { UserRepository } from "src/repositories";
-import { type AuthResponseDto } from "src/types/auth.types";
+import {
+  type AuthRequestDto,
+  type AuthResponseDto,
+} from "src/types/auth.types";
 
 import userService, { returnPartialUser } from "./user.service";
 
 const privateKeyPath: string = path.join(__dirname, "../certs/private.key");
 const privateKey = fs.readFileSync(privateKeyPath);
 
-const signup = async (newUser: Partial<User>): Promise<AuthResponseDto> => {
-  if (newUser.email === undefined) {
+const signup = async (newUser: AuthRequestDto): Promise<AuthResponseDto> => {
+  if (newUser.email === undefined || newUser.password === undefined) {
     return { success: false, message: "Wrong request format." };
   }
   const verificationToken = returnEmailToken();
@@ -24,7 +27,9 @@ const signup = async (newUser: Partial<User>): Promise<AuthResponseDto> => {
     ...newUser,
     verificationToken,
   });
-  await sendVerificationEmail(newUser.email, verificationToken);
+  if (response.success) {
+    await sendVerificationEmail(newUser.email, verificationToken);
+  }
   return response;
 };
 
@@ -47,12 +52,9 @@ const verify = async (token: string): Promise<AuthResponseDto> => {
   };
 };
 
-const login = async (
-  email: string,
-  password: string,
-): Promise<AuthResponseDto> => {
+const login = async (currUser: AuthRequestDto): Promise<AuthResponseDto> => {
   const user = await UserRepository.findOne({
-    where: { email },
+    where: { email: currUser.email },
   });
   if (user === null) {
     return { success: false, message: "No such user." };
@@ -61,7 +63,7 @@ const login = async (
     return { success: false, message: "User email not verified." };
   }
   const salt = user.salt;
-  const hashedPassword = hashPassword(password, salt);
+  const hashedPassword = hashPassword(currUser.password, salt);
   if (hashedPassword !== user.password) {
     return { success: false, message: "Wrong password." };
   }

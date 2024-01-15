@@ -1,18 +1,20 @@
+import { type InterestType } from "src/entities/user.entity";
+
 import { type PartialBoardDto } from "./board.types";
 
-export interface UserResponseDto {
-  success: boolean;
-  message: string;
-  user?: PartialUserDto;
-  token?: string;
-  boards?: PartialBoardDto[];
+export interface NewUserDto {
+  email: string;
+  password: string;
+  salt?: string;
+  isVerified?: boolean;
+  verificationToken?: string;
 }
 
 export interface PartialUserDto {
-  _id: number;
+  id: number;
   email: string;
   name: string;
-  interest: string;
+  interest?: string;
 }
 
 /**
@@ -22,7 +24,7 @@ export interface PartialUserDto {
  *     PartialUserDto:
  *       type: object
  *       properties:
- *         _id:
+ *         id:
  *           type: number
  *           description: User ID
  *         email:
@@ -36,6 +38,11 @@ export interface PartialUserDto {
  *           type: string
  *           description: User interest
  */
+
+export interface UserRequestDto {
+  name?: string;
+  interest?: InterestType;
+}
 
 /**
  * @swagger
@@ -51,6 +58,14 @@ export interface PartialUserDto {
  *           type: string
  *           description: User interest
  */
+
+export interface UserResponseDto {
+  success: boolean;
+  message: string;
+  user?: PartialUserDto;
+  token?: string;
+  boards?: PartialBoardDto[];
+}
 
 /**
  * @swagger

@@ -1,12 +1,16 @@
 import { validate } from "class-validator";
 import { type InterestType, type User } from "src/entities/user.entity";
 import { UserRepository } from "src/repositories";
-import { type UserResponseDto } from "src/types/user.types";
+import {
+  type NewUserDto,
+  type UserRequestDto,
+  type UserResponseDto,
+} from "src/types/user.types";
 
 import { createJWT, createSalt, hashPassword } from "./auth.service";
 import { returnPartialBoard } from "./board.service";
 
-const createUser = async (newUser: Partial<User>): Promise<UserResponseDto> => {
+const createUser = async (newUser: NewUserDto): Promise<UserResponseDto> => {
   if (
     newUser.email === undefined ||
     newUser.password === undefined ||
@@ -29,7 +33,8 @@ const createUser = async (newUser: Partial<User>): Promise<UserResponseDto> => {
   if (errors.length > 0) {
     return { success: false, message: "Wrong request format." };
   }
-  const user = await UserRepository.save(newUser);
+  const user = UserRepository.create(newUser);
+  await UserRepository.save(user);
   return {
     success: true,
     message: "Successful signup",
@@ -57,7 +62,7 @@ const getUser = async (_id: number): Promise<UserResponseDto> => {
 
 const updateUser = async (
   _id: number,
-  updatedUser: Partial<User>,
+  updatedUser: UserRequestDto,
 ): Promise<UserResponseDto> => {
   const user = await UserRepository.findOne({
     where: { _id },
@@ -70,7 +75,6 @@ const updateUser = async (
     success: true,
     message: "User updated",
     user: returnPartialUser({ ...user, ...updatedUser }),
-    boards: returnBoards({ ...user, ...updatedUser }),
   };
 };
 
@@ -95,10 +99,9 @@ export default userService;
 
 export const returnPartialUser = (user: User) => {
   return {
-    _id: user._id,
+    id: user._id,
     email: user.email,
     name: user.name,
-    interest: user.interest,
   };
 };
 

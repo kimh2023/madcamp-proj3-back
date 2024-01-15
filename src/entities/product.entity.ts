@@ -11,17 +11,20 @@ export class Product {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ default: 0 })
   price: number;
 
-  @Column()
+  @Column({ default: 0 })
   rating: number;
 
-  @Column()
+  @Column({
+    default:
+      "https://i.pinimg.com/564x/20/4e/90/204e905bfc7f55c45f3a0eeddc2431c9.jpg",
+  })
   @IsUrl()
   image: string;
 
-  @Column()
+  @Column({ nullable: true })
   @IsUrl()
   link: string;
 

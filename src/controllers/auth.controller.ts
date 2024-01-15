@@ -1,11 +1,11 @@
 import { type NextFunction, type Request, type Response } from "express";
-import { type User } from "src/entities/user.entity";
 import authService from "src/services/auth.service";
+import { type AuthRequestDto } from "src/types/auth.types";
 import { type RequestHandlerDto, catchAsync } from "src/utils/catchAsync";
 
 const signup: RequestHandlerDto = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const response = await authService.signup(req.body as Partial<User>);
+    const response = await authService.signup(req.body as AuthRequestDto);
     res.status(response.success ? 200 : 400).json(response);
   },
 );
@@ -20,9 +20,7 @@ const verify: RequestHandlerDto = catchAsync(
 
 const login: RequestHandlerDto = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const email: string = req.body.email;
-    const password: string = req.body.password;
-    const response = await authService.login(email, password);
+    const response = await authService.login(req.body as AuthRequestDto);
     res.status(response.success ? 200 : 400).json(response);
   },
 );
