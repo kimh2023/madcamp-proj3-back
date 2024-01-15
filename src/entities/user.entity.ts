@@ -15,7 +15,7 @@ enum UserType {
   User = "user",
 }
 
-enum InterestType {
+export enum InterestType {
   FoodAndDrink = "Food And Drink",
   Technology = "Technology",
 }

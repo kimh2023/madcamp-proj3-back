@@ -10,7 +10,7 @@ import { type User } from "src/entities/user.entity";
 import { UserRepository } from "src/repositories";
 import { type AuthResponseDto } from "src/types/auth.types";
 
-import { createUser, returnPartialUser } from "./user.service";
+import userService, { returnPartialUser } from "./user.service";
 
 const privateKeyPath: string = path.join(__dirname, "../certs/private.key");
 const privateKey = fs.readFileSync(privateKeyPath);
@@ -20,7 +20,7 @@ const signup = async (newUser: Partial<User>): Promise<AuthResponseDto> => {
     return { success: false, message: "Wrong request format." };
   }
   const verificationToken = returnEmailToken();
-  const response = await createUser({
+  const response = await userService.createUser({
     ...newUser,
     verificationToken,
   });

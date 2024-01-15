@@ -20,8 +20,6 @@ const authRouter = require("src/routes/auth.route");
 const searchRouter = require("src/routes/search.route");
 const usersRouter = require("src/routes/user.route");
 
-console.log(process.env.DB_HOST);
-
 const options = {
   definition: {
     openapi: "3.1.0",
