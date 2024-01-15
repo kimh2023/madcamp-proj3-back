@@ -3,7 +3,6 @@ import * as crypto from "crypto";
 import * as fs from "fs";
 import { google } from "googleapis";
 import * as jwt from "jsonwebtoken";
-import { ObjectId } from "mongodb";
 import { type SentMessageInfo } from "nodemailer";
 import * as nodemailer from "nodemailer";
 import type SMTPTransport from "nodemailer/lib/smtp-transport";
@@ -48,9 +47,12 @@ const signup = async (
 };
 
 const verify = async (token: string): Promise<AuthResponseDto> => {
-  const user = await UserRepository.findOneAndUpdate(
+  const user = await UserRepository.findOne({
+    where: { verificationToken: token, isVerified: false },
+  });
+  const updateResult = await UserRepository.update(
     { verificationToken: token, isVerified: false },
-    { $set: { isVerified: true, verificationToken: null } },
+    { isVerified: true, verificationToken: null },
   );
   if (user === null) {
     return { success: false, message: "Wrong verification token." };
@@ -58,8 +60,8 @@ const verify = async (token: string): Promise<AuthResponseDto> => {
   return {
     success: true,
     message: "Successful signup",
-    user: returnPartialUser(user as User),
-    token: createJWT(user as User),
+    user: returnPartialUser(user),
+    token: createJWT(user),
   };
 };
 
@@ -89,9 +91,9 @@ const login = async (
   };
 };
 
-const refresh = async (_id: string): Promise<AuthResponseDto> => {
+const refresh = async (_id: number): Promise<AuthResponseDto> => {
   const user = await UserRepository.findOne({
-    where: { _id: new ObjectId(_id), isVerified: true },
+    where: { _id, isVerified: true },
   });
   if (user === null) {
     return { success: false, message: "No such user." };
@@ -159,7 +161,7 @@ const sendVerificationEmail = async (
 
   const { token } = await oAuth2Client.getAccessToken();
 
-  if (!token) {
+  if (token === null) {
     return;
   }
 

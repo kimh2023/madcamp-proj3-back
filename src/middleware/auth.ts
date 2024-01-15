@@ -1,13 +1,15 @@
 import { type NextFunction, type Request, type Response } from "express";
 import fs from "fs";
 import jwt, { type JwtPayload } from "jsonwebtoken";
+import { UserRepository } from "src/repositories";
+import { type RequestHandlerDto, catchAsync } from "src/utils/catchAsync";
 
 const path = require("path");
 const publicKeyPath: string = path.join(__dirname, "../certs/public.key");
 const publicKey = fs.readFileSync(publicKeyPath);
 
-export const auth = (req: Request, res: Response, next: NextFunction) => {
-  try {
+export const auth: RequestHandlerDto = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
 
     if (authHeader === undefined || !authHeader.startsWith("Bearer ")) {
@@ -20,11 +22,15 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
       algorithms: ["RS256"],
     }) as JwtPayload;
 
-    (req as any).user = decoded.id;
+    (req as any).user = Number(decoded.id as string);
 
-    next();
-  } catch (error) {
-    console.error("Authentication error:", error);
-    return res.status(500).send("Internal Server Error");
-  }
-};
+    const user = await UserRepository.findOne({
+      where: { _id: Number(decoded.id as string), isVerified: true },
+    });
+    if (user === null) {
+      res.status(404).json({ success: false, message: "No such user." });
+    } else {
+      next();
+    }
+  },
+);

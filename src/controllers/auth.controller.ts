@@ -36,7 +36,7 @@ const logout: RequestHandlerDto = catchAsync(
 
 const refresh: RequestHandlerDto = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const _id = (req as any).user as string;
+    const _id = (req as any).user as number;
     const response = await authService.refresh(_id);
     res.status(response.success ? 200 : 400).json(response);
   },

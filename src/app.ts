@@ -13,7 +13,7 @@ const authRouter = require("src/routes/auth.route");
 const searchRouter = require("src/routes/search.route");
 const usersRouter = require("src/routes/user.route");
 
-require("dotenv").config({ path: path.join(__dirname, ".env") });
+require("dotenv").config({ path: path.join(__dirname, "../.env") });
 
 const options = {
   definition: {
