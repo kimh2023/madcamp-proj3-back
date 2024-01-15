@@ -26,5 +26,5 @@ export class Product {
   link: string;
 
   @OneToMany(() => Pin, (pin) => pin.product, { onDelete: "CASCADE" })
-  pin: Pin[];
+  pins: Pin[];
 }
