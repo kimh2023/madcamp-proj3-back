@@ -1,13 +1,12 @@
 import { IsUrl } from "class-validator";
-import { ObjectId } from "mongodb";
-import { Column, Entity, ObjectIdColumn, OneToMany } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 import { Pin } from "./pin.entity";
 
 @Entity("tb_products")
 export class Product {
-  @ObjectIdColumn()
-  _id: ObjectId;
+  @PrimaryGeneratedColumn()
+  _id: number;
 
   @Column()
   name: string;
@@ -26,6 +25,6 @@ export class Product {
   @IsUrl()
   link: string;
 
-  @OneToMany(() => Pin, (pin) => pin.product)
+  @OneToMany(() => Pin, (pin) => pin.product, { onDelete: "CASCADE" })
   pin: Pin[];
 }

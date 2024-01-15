@@ -1,4 +1,3 @@
-import { validate } from "class-validator";
 import * as crypto from "crypto";
 import * as fs from "fs";
 import { google } from "googleapis";
@@ -7,43 +6,26 @@ import { type SentMessageInfo } from "nodemailer";
 import * as nodemailer from "nodemailer";
 import type SMTPTransport from "nodemailer/lib/smtp-transport";
 import * as path from "path";
-import { User } from "src/entities/user.entity";
+import { type User } from "src/entities/user.entity";
 import { UserRepository } from "src/repositories";
 import { type AuthResponseDto } from "src/types/auth.types";
+
+import { createUser, returnPartialUser } from "./user.service";
 
 const privateKeyPath: string = path.join(__dirname, "../certs/private.key");
 const privateKey = fs.readFileSync(privateKeyPath);
 
-const signup = async (
-  email: string,
-  password: string,
-): Promise<AuthResponseDto> => {
-  const userExisting = await UserRepository.findOne({ where: { email } });
-  if (userExisting !== null) {
-    return { success: false, message: "Existing user." };
-  }
-  if (password.length < 8) {
+const signup = async (newUser: Partial<User>): Promise<AuthResponseDto> => {
+  if (newUser.email === undefined) {
     return { success: false, message: "Wrong request format." };
   }
-  const userTemplate = new User();
-  const salt = createSalt();
   const verificationToken = returnEmailToken();
-  userTemplate.email = email;
-  userTemplate.password = hashPassword(password, salt);
-  userTemplate.salt = salt;
-  userTemplate.verificationToken = verificationToken;
-  const errors = await validate(userTemplate);
-  if (errors.length > 0) {
-    return { success: false, message: "Wrong request format." };
-  }
-  const user = await UserRepository.save(userTemplate);
-  await sendVerificationEmail(email, verificationToken);
-  return {
-    success: true,
-    message: "Successful signup",
-    user: returnPartialUser(user),
-    token: createJWT(user),
-  };
+  const response = await createUser({
+    ...newUser,
+    verificationToken,
+  });
+  await sendVerificationEmail(newUser.email, verificationToken);
+  return response;
 };
 
 const verify = async (token: string): Promise<AuthResponseDto> => {
@@ -52,7 +34,7 @@ const verify = async (token: string): Promise<AuthResponseDto> => {
   });
   const updateResult = await UserRepository.update(
     { verificationToken: token, isVerified: false },
-    { isVerified: true, verificationToken: null },
+    { isVerified: true, verificationToken: undefined },
   );
   if (user === null) {
     return { success: false, message: "Wrong verification token." };
@@ -117,15 +99,15 @@ export default authService;
 
 /// /////////////
 
-const createSalt = () => {
+export const createSalt = () => {
   return crypto.randomBytes(16).toString("hex");
 };
 
-const hashPassword = (password: string, salt: string) => {
+export const hashPassword = (password: string, salt: string) => {
   return crypto.pbkdf2Sync(password, salt, 1000, 64, "sha512").toString();
 };
 
-const createJWT = (user: User) => {
+export const createJWT = (user: User) => {
   const token = jwt.sign(
     { id: user._id, email: user.email, iat: Math.floor(Date.now() / 1000) },
     privateKey,
@@ -137,11 +119,7 @@ const createJWT = (user: User) => {
   return token;
 };
 
-const returnPartialUser = (user: User) => {
-  return { id: user._id, email: user.email };
-};
-
-const returnEmailToken = () => {
+export const returnEmailToken = () => {
   return crypto.randomBytes(16).toString("hex");
 };
 

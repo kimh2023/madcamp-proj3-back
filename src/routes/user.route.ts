@@ -4,6 +4,9 @@ import { auth } from "src/middleware/auth";
 
 const router = express.Router();
 
-router.get("/:userId", auth, userController.getUser);
+router
+  .route("/:userId")
+  .get(auth, userController.getUser)
+  .patch(auth, userController.updateUser);
 
 module.exports = router;

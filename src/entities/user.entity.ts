@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -28,21 +29,21 @@ export class User {
   @IsEmail()
   email: string;
 
-  @Column({ type: "string", default: "" })
-  name = "";
+  @Column({ default: "" })
+  name: string;
 
   @Column({
     type: "enum",
     enum: InterestType,
     default: InterestType.Technology,
   })
-  interest = InterestType.Technology;
+  interest: InterestType;
 
   @Column({ nullable: true })
-  verificationToken: string | null;
+  verificationToken: string;
 
-  @Column({ type: "boolean", default: false })
-  isVerified = false;
+  @Column({ default: false })
+  isVerified: boolean;
 
   @Column()
   // @Length(5, 20)
@@ -59,8 +60,9 @@ export class User {
     enum: UserType,
     default: UserType.User,
   })
-  type = UserType.User;
+  type: UserType;
 
-  @OneToMany(() => Board, (board) => board.user)
-  board: Board[];
+  @OneToMany(() => Board, (board) => board.user, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "_id" })
+  boards: Board[];
 }

@@ -1,51 +1,66 @@
-import { Board } from "src/entities/board.entity";
+import { validate } from "class-validator";
 import { type User } from "src/entities/user.entity";
-import { BoardRepository, UserRepository } from "src/repositories";
+import { UserRepository } from "src/repositories";
 
-const getUser = async (_id: number) => {
-  const tmp = await UserRepository.findOne({ where: { _id } });
-  if (!tmp) {
-    return;
+import { createJWT, createSalt, hashPassword } from "./auth.service";
+
+export const createUser = async (newUser: Partial<User>) => {
+  if (
+    newUser.email === undefined ||
+    newUser.password === undefined ||
+    newUser.password.length < 8
+  ) {
+    return { success: false, message: "Wrong request format." };
   }
 
-  const newBoard = new Board();
-  newBoard.user = tmp;
-  const savedBoard = await BoardRepository.save(newBoard);
+  const userExisting = await UserRepository.findOne({
+    where: { email: newUser.email },
+  });
+  if (userExisting !== null) {
+    return { success: false, message: "Existing user." };
+  }
 
-  const user = UserRepository.findOne({
+  const salt = createSalt();
+  newUser.password = hashPassword(newUser.password, salt);
+  newUser.salt = salt;
+  const errors = await validate(newUser);
+  if (errors.length > 0) {
+    return { success: false, message: "Wrong request format." };
+  }
+  const user = await UserRepository.save(newUser);
+  return {
+    success: true,
+    message: "Successful signup",
+    user: returnPartialUser(user),
+    token: createJWT(user),
+  };
+};
+
+const getUser = async (_id: number) => {
+  const user = await UserRepository.findOne({
     where: { _id },
-    relations: ["boards"],
+    relations: ["boards", "boards"],
   });
 
-  // const user = (
-  //   await UserRepository.aggregate([
-  //     {
-  //       $match: { _id },
-  //     },
-  //     {
-  //       $lookup: {
-  //         from: "tb_boards",
-  //         localField: "board._id",
-  //         foreignField: "_id",
-  //         as: "boardInfo",
-  //       },
-  //     },
-  //   ]).toArray()
-  // )[0];
   if (user === null) {
     return { success: false, message: "No such user." };
   }
-  console.log(user);
+  return {
+    success: true,
+    message: "User retrieved",
+    user: returnPartialUser(user),
+    boards: returnBoards(user),
+  };
 };
 
 const userService = { getUser };
 
 export default userService;
 
-const returnPartialUser = (user: User) => {
+export const returnPartialUser = (user: User) => {
   return { id: user._id, email: user.email };
 };
-// {
-//     where: { _id },
-//     relations: ["board", "board.pin.place"],
-//   },
+
+const returnBoards = (user: User) => {
+  return user.boards;
+};

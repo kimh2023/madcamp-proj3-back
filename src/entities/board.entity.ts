@@ -1,4 +1,11 @@
-import { Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
 import { Pin } from "./pin.entity";
 import { User } from "./user.entity";
@@ -8,9 +15,13 @@ export class Board {
   @PrimaryGeneratedColumn()
   _id: number;
 
-  @OneToMany(() => Pin, (pin) => pin.board)
+  @Column({ default: "" })
+  name: string;
+
+  @OneToMany(() => Pin, (pin) => pin.board, { onDelete: "CASCADE" })
   pin: Pin[];
 
-  @ManyToMany(() => User, (user) => user.board)
+  @ManyToOne(() => User, (user) => user.boards, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "_id" })
   user: User;
 }

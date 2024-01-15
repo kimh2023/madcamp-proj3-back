@@ -1,12 +1,11 @@
 import { type NextFunction, type Request, type Response } from "express";
+import { type User } from "src/entities/user.entity";
 import authService from "src/services/auth.service";
 import { type RequestHandlerDto, catchAsync } from "src/utils/catchAsync";
 
 const signup: RequestHandlerDto = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const email: string = req.body.email;
-    const password: string = req.body.password;
-    const response = await authService.signup(email, password);
+    const response = await authService.signup(req.body as Partial<User>);
     res.status(response.success ? 200 : 400).json(response);
   },
 );
