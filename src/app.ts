@@ -45,7 +45,7 @@ const options = {
       },
     ],
   },
-  apis: ["src/routes/*.ts"],
+  apis: ["src/routes/*.ts", "src/types/*.ts"],
 };
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");

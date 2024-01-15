@@ -4,6 +4,7 @@ import { UserRepository } from "src/repositories";
 import { type UserResponseDto } from "src/types/user.types";
 
 import { createJWT, createSalt, hashPassword } from "./auth.service";
+import { returnPartialBoard } from "./board.service";
 
 const createUser = async (newUser: Partial<User>): Promise<UserResponseDto> => {
   if (
@@ -93,7 +94,12 @@ const userService = { createUser, getUser, updateUser, deleteUser };
 export default userService;
 
 export const returnPartialUser = (user: User) => {
-  return { id: user._id, email: user.email, name: user.name };
+  return {
+    _id: user._id,
+    email: user.email,
+    name: user.name,
+    interest: user.interest,
+  };
 };
 
 const returnCompleteUser = (user: User) => {
@@ -104,5 +110,5 @@ const returnCompleteUser = (user: User) => {
 };
 
 const returnBoards = (user: User) => {
-  return user.boards;
+  return user.boards.map((board) => returnPartialBoard(board));
 };

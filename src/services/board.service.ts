@@ -21,13 +21,14 @@ const createBoard = async (
     success: true,
     message: "Successful board creation",
     board: returnPartialBoard(board),
+    pins: [],
   };
 };
 
 const getBoard = async (_id: number): Promise<BoardResponseDto> => {
   const board = await BoardRepository.findOne({
     where: { _id },
-    relations: ["pins"],
+    relations: ["pins", "pins.product"],
   });
   if (board === null) {
     return { success: false, message: "No such board." };
@@ -46,7 +47,7 @@ const updateBoard = async (
 ): Promise<BoardResponseDto> => {
   const board = await BoardRepository.findOne({
     where: { _id },
-    relations: ["pins"],
+    relations: ["pins", "pins.product"],
   });
   if (board === null) {
     return { success: false, message: "No such board." };
@@ -80,10 +81,18 @@ const boardService = { createBoard, getBoard, updateBoard, deleteBoard };
 
 export default boardService;
 
-const returnPartialBoard = (board: Board) => {
-  return { id: board._id, name: board.name };
+export const returnPartialBoard = (board: Board) => {
+  return { _id: board._id, name: board.name };
 };
 
 const returnPins = (board: Board) => {
-  return board.pins;
+  return board.pins.map((pin) => ({
+    _id: pin._id,
+    name: pin.product.name,
+    price: pin.product.price,
+    rating: pin.product.rating,
+    image: pin.product.image,
+    link: pin.product.link,
+    boardId: board._id,
+  }));
 };

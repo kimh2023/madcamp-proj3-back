@@ -33,7 +33,6 @@ module.exports = router;
  *       summary: "이미지 검색용 API"
  *       tags: [Search]
  *       requestBody:
- *         description: "이미지 검색용 API"
  *         required: true
  *         content:
  *           multipart/form-data:
