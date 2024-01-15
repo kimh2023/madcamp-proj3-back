@@ -1,4 +1,5 @@
 import { type Product } from "./entities/product.entity";
+import productService from "./services/product.service";
 import userService from "./services/user.service";
 import { type NewUserDto } from "./types/user.types";
 
@@ -9,10 +10,11 @@ const testUser1: NewUserDto = {
 };
 
 const testProduct1: Partial<Product> = {
+  _id: 1,
   name: "test1",
 };
 
 export const initData = async () => {
   await userService.createUser(testUser1);
-  // await
+  await productService.createProduct(testProduct1);
 };

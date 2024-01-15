@@ -14,6 +14,6 @@ export class Pin {
   @ManyToOne(() => Board, (board) => board.pins, { onDelete: "CASCADE" })
   board: Board;
 
-  @Column()
+  @Column({ default: "" })
   note: string;
 }

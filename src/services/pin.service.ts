@@ -4,7 +4,6 @@ import {
   BoardRepository,
   PinRepository,
   ProductRepository,
-  UserRepository,
 } from "src/repositories";
 import { type CompletePinDto, type PinResponseDto } from "src/types/pin.types";
 
@@ -13,15 +12,19 @@ const createPin = async (
   productId: number,
   newPin: Partial<Pin>,
 ): Promise<PinResponseDto> => {
+  console.log(boardId, typeof boardId);
   const board = await BoardRepository.findOne({
     where: { _id: boardId },
   });
   const product = await ProductRepository.findOne({
     where: { _id: productId },
   });
-  if (board === null || product === null) {
+  if (board === null) {
     return { success: false, message: "No such board." };
+  } else if (product === null) {
+    return { success: false, message: "No such product." };
   }
+
   newPin.board = board;
   newPin.product = product;
   const pin: Pin = PinRepository.create(newPin);
@@ -43,7 +46,7 @@ const getPin = async (_id: number): Promise<PinResponseDto> => {
   }
   return {
     success: true,
-    message: "Board retrieved",
+    message: "Pin retrieved",
     pin: returnCompletePin(pin),
   };
 };
@@ -62,7 +65,7 @@ const updatePin = async (
   const updateResult = await PinRepository.update({ _id }, updatedPin);
   return {
     success: true,
-    message: "Board updated",
+    message: "Pin updated",
     pin: returnCompletePin({ ...pin, ...updatedPin }),
   };
 };
@@ -75,10 +78,10 @@ const deletePin = async (_id: number): Promise<PinResponseDto> => {
   if (pin === null) {
     return { success: false, message: "No such pin." };
   }
-  const deleteResult = await UserRepository.delete({ _id });
+  const deleteResult = await PinRepository.delete({ _id });
   return {
     success: true,
-    message: "Board deleted",
+    message: "Pin deleted",
     pin: returnCompletePin(pin),
   };
 };

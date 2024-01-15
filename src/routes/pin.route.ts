@@ -2,7 +2,7 @@ import express from "express";
 import pinController from "src/controllers/pin.controller";
 import { auth } from "src/middleware/auth";
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.route("/").post(auth, pinController.createPin);
 

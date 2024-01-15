@@ -28,7 +28,6 @@ const createBoard = async (
     success: true,
     message: "Successful board creation",
     board: returnPartialBoard(board),
-    pins: [],
   };
 };
 
@@ -64,7 +63,6 @@ const updateBoard = async (
     success: true,
     message: "Board updated",
     board: returnPartialBoard({ ...board, ...updatedBoard }),
-    pins: returnPartialPins({ ...board, ...updatedBoard }),
   };
 };
 
