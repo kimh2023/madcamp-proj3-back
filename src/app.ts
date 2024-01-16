@@ -3,6 +3,7 @@ import { type NextFunction, type Request, type Response } from "express";
 import path from "path";
 
 import { initData } from "./AppDataInit";
+import { populateProducts } from "./AppDataPopulate";
 import { AppDataSource } from "./AppDataSource";
 import {
   BoardRepository,
@@ -89,6 +90,13 @@ AppDataSource.initialize()
       await ProductRepository.delete({});
       await BoardRepository.delete({});
       await UserRepository.delete({});
+      populateProducts()
+        .then(() => {
+          console.log("Data Source has been POPULATED!");
+        })
+        .catch((err) => {
+          console.error("Data Source population had the error: ", err);
+        });
     } else {
       console.log("Data Source has been INITIALIZED!");
     }

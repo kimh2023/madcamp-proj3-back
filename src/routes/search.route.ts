@@ -82,13 +82,25 @@ module.exports = router;
  *                 items:
  *                   type: object
  *                   properties:
+ *                     id:
+ *                       type: number
+ *                       description: "검색된 제품의 아이디 (핀을 새로 만들때 제품 아이디를 같이 보내줘야 함..!!)"
  *                     name:
  *                       type: string
  *                       description: "검색된 제품의 이름"
- *                     category:
- *                       type: string
- *                       description: "검색된 제품의 카테고리"
  *                     score:
  *                       type: number
  *                       description: "검색된 제품의 점수"
+ *                     image:
+ *                       type: string
+ *                       description: "검색된 제품의 이미지 링크"
+ *                     link:
+ *                       type: string
+ *                       description: "검색된 제품의 아마존 링크"
+ *                     price:
+ *                       type: number
+ *                       description: "검색된 제품의 가격 (USD)"
+ *                     rating:
+ *                       type: number
+ *                       description: "검색된 제품의 평점"
  */

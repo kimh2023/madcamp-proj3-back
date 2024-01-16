@@ -11,10 +11,10 @@ export class Product {
   @Column()
   name: string;
 
-  @Column({ default: 0 })
+  @Column({ type: "decimal", precision: 10, scale: 2, default: 0 })
   price: number;
 
-  @Column({ default: 0 })
+  @Column({ type: "decimal", precision: 10, scale: 1, default: 0 })
   rating: number;
 
   @Column({

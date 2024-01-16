@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env GOOGLE_APPLICATION_CREDENTIALS=./image_uploader/certs/august-oarlock-410522-794896e86aff.json NODE_PATH=./ NODE_ENV=dev SYNCHRONIZE=false ts-node ./src/bin/www",
-    "sync": "cross-env GOOGLE_APPLICATION_CREDENTIALS=./image_uploader/certs/august-oarlock-410522-794896e86aff.json NODE_PATH=./ NODE_ENV=dev SYNCHRONIZE=true ts-node ./src/bin/www",
-    "populate": "cross-env GOOGLE_APPLICATION_CREDENTIALS=./image_uploader/certs/august-oarlock-410522-794896e86aff.json NODE_PATH=./ NODE_ENV=dev POPULATE=true ts-node ./src/bin/www"
+    "start": "cross-env GOOGLE_APPLICATION_CREDENTIALS=./image_uploader/certs/august-oarlock-410522-b223b2be92ed.json NODE_PATH=./ NODE_ENV=dev SYNCHRONIZE=false ts-node ./src/bin/www",
+    "sync": "cross-env GOOGLE_APPLICATION_CREDENTIALS=./image_uploader/certs/august-oarlock-410522-b223b2be92ed.json NODE_PATH=./ NODE_ENV=dev SYNCHRONIZE=true ts-node ./src/bin/www",
+    "populate": "cross-env GOOGLE_APPLICATION_CREDENTIALS=./image_uploader/certs/august-oarlock-410522-b223b2be92ed.json NODE_PATH=./ NODE_ENV=dev POPULATE=true ts-node ./src/bin/www"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.7.0",
@@ -19,6 +19,7 @@
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
+    "csv-write-stream": "^2.0.0",
     "debug": "~2.6.9",
     "dotenv": "^16.3.1",
     "ejs": "~2.6.1",

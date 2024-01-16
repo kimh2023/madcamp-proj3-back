@@ -31,7 +31,7 @@ const createPin = async (
   await PinRepository.save(pin);
   return {
     success: true,
-    message: "Successful board creation",
+    message: "Successful pin creation",
     pin: returnCompletePin(pin),
   };
 };
