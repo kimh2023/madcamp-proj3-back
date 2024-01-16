@@ -74,7 +74,7 @@ AppDataSource.initialize()
   .then(async () => {
     if (process.env.SYNCHRONIZE === "true") {
       await PinRepository.delete({});
-      await ProductRepository.delete({});
+      // await ProductRepository.delete({});
       await BoardRepository.delete({});
       await UserRepository.delete({});
       initData()
@@ -84,6 +84,11 @@ AppDataSource.initialize()
         .catch((err) => {
           console.error("Data Source clearing had the error: ", err);
         });
+    } else if (process.env.POPULATE === "true") {
+      await PinRepository.delete({});
+      await ProductRepository.delete({});
+      await BoardRepository.delete({});
+      await UserRepository.delete({});
     } else {
       console.log("Data Source has been INITIALIZED!");
     }

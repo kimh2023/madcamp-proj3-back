@@ -5,7 +5,7 @@ import { type NewUserDto } from "./types/user.types";
 
 const testUser1: NewUserDto = {
   email: "kimh2364@gmail.com",
-  password: "hidaahid",
+  password: "00000000",
   isVerified: true,
 };
 

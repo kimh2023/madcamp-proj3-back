@@ -10,11 +10,11 @@ const readline = require("readline");
 
 const jsonlFilePath = path.join(
   __dirname,
-  "image_links/search_results_output.jsonl"
+  "image_links/search_results_output.jsonl",
 );
 const jsonlWritePath = path.join(
   __dirname,
-  "image_links/search_results_check.jsonl"
+  "image_links/search_results_check.jsonl",
 );
 
 const jsonlStream = readline.createInterface({
@@ -22,27 +22,31 @@ const jsonlStream = readline.createInterface({
 });
 const jsonlWriteStream = fs.createWriteStream(jsonlWritePath, { flags: "w" });
 
+let index = 0;
 jsonlStream.on("line", async (line: any) => {
   try {
     const jsonData = JSON.parse(line);
-
     console.log(`Downloading image from ${jsonData.image}`);
-
     try {
-      const fileName = jsonData.title;
+      const fileName = index;
       const imageData = await downloadImage(jsonData.image);
       console.log("Image downloaded successfully:", imageData);
-      const fileLink = await uploadImage(fileName, imageData);
+      const fileLink = await uploadImage(String(fileName), imageData);
       jsonlWriteStream.write(
-        JSON.stringify({ ...jsonData, file_link: fileLink, success: true }) +
-          "\n"
+        JSON.stringify({
+          index: index,
+          ...jsonData,
+          file_link: fileLink,
+          success: true,
+        }) + "\n",
       );
       await new Promise((resolve) => setTimeout(resolve, 1000));
+      index++;
     } catch (downloadError: any) {
       console.error(`Error downloading image from URL: ${jsonData.image}`);
       console.error(downloadError.message);
       jsonlWriteStream.write(
-        JSON.stringify({ ...jsonData, success: false }) + "\n"
+        JSON.stringify({ ...jsonData, success: false }) + "\n",
       );
     }
   } catch (jsonParseError: any) {
@@ -73,7 +77,7 @@ const downloadImage = async (url: string) => {
 
 const serviceKey = path.join(
   __dirname,
-  "certs/august-oarlock-410522-794896e86aff.json"
+  "certs/august-oarlock-410522-794896e86aff.json",
 );
 
 const storage = new Storage({
@@ -89,7 +93,7 @@ const uploadImage = async (fileName: string, file: Buffer) => {
       uploadFileName = uploadFileName.substring(0, 120); // product id limit length
     }
     // const blob = bucket.file(fileName + ".jpg");
-    const blob = bucket.file(uploadFileName + ".jpg");
+    const blob = bucket.file(".productImages/" + uploadFileName + ".jpg");
     // const blob = bucket.file(fileName.replace(/ /g, "%20") + ".jpg");
     const blobStream = blob.createWriteStream({
       resumable: false,

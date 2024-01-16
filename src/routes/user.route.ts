@@ -1,6 +1,6 @@
 import express from "express";
 import userController from "src/controllers/user.controller";
-import { auth, authUser } from "src/middleware/auth";
+import { auth, authLoose, authUser } from "src/middleware/auth";
 
 const router = express.Router();
 
@@ -9,6 +9,9 @@ router
   .get(auth, userController.getUser)
   .patch(authUser, userController.updateUser)
   .delete(authUser, userController.deleteUser);
+
+router.patch("/:userId/signUp", authLoose, userController.updateUser);
+router.get("/:userId/verified", userController.getUserVerified);
 
 module.exports = router;
 

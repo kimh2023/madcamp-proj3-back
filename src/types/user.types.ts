@@ -86,3 +86,9 @@ export interface UserResponseDto {
  *           items:
  *             $ref: "#/components/schemas/PartialBoardDto"
  */
+
+export interface UserVerifiedResponseDto {
+  success: boolean;
+  message: string;
+  isVerified: boolean;
+}

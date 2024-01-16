@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "cross-env GOOGLE_APPLICATION_CREDENTIALS=./image_uploader/certs/august-oarlock-410522-794896e86aff.json NODE_PATH=./ NODE_ENV=dev SYNCHRONIZE=false ts-node ./src/bin/www",
-    "sync": "cross-env GOOGLE_APPLICATION_CREDENTIALS=./image_uploader/certs/august-oarlock-410522-794896e86aff.json NODE_PATH=./ NODE_ENV=dev SYNCHRONIZE=true ts-node ./src/bin/www"
+    "sync": "cross-env GOOGLE_APPLICATION_CREDENTIALS=./image_uploader/certs/august-oarlock-410522-794896e86aff.json NODE_PATH=./ NODE_ENV=dev SYNCHRONIZE=true ts-node ./src/bin/www",
+    "populate": "cross-env GOOGLE_APPLICATION_CREDENTIALS=./image_uploader/certs/august-oarlock-410522-794896e86aff.json NODE_PATH=./ NODE_ENV=dev POPULATE=true ts-node ./src/bin/www"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.7.0",
@@ -12,6 +13,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/express": "^4.17.21",
     "@typescript-eslint/parser": "^6.17.0",
+    "axios": "^1.6.5",
     "bcryptjs": "^2.4.3",
     "class-validator": "^0.14.1",
     "cookie-parser": "~1.4.4",
