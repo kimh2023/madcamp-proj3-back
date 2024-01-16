@@ -1,5 +1,5 @@
 // Imports the Google Cloud client library
-const vision = require("@google-cloud/vision");
+import vision from "@google-cloud/vision";
 // Creates a client
 const client = new vision.ProductSearchClient();
 
@@ -9,7 +9,7 @@ async function importProductSets() {
    */
   const projectId = "august-oarlock-410522";
   const location = "asia-east1"; // only this allowed in asia....
-  const gcsUri = "gs://madcamp/csv/search_results_check.csv";
+  const gcsUri = "gs://madcamp/.csv/search_results_check.csv";
 
   // A resource that represents Google Cloud Platform location.
   const projectLocation = client.locationPath(projectId, location);
@@ -27,6 +27,10 @@ async function importProductSets() {
     inputConfig: inputConfig,
   });
 
+  if (!operation) {
+    return;
+  }
+
   console.log("Processing operation name: ", operation.name);
 
   // synchronous check of operation status
@@ -35,11 +39,16 @@ async function importProductSets() {
   console.log("Results of the processing:");
 
   for (const i in result.statuses) {
-    console.log("Status of processing ", i, "of the csv:", result.statuses[i]);
+    console.log(
+      "Status of processing ",
+      i,
+      "of the csv:",
+      result.statuses[Number(i)],
+    );
 
     // Check the status of reference image
-    if (result.statuses[i].code === 0) {
-      console.log(result.referenceImages[i]);
+    if (result.statuses[Number(i)].code === 0 && result.referenceImages) {
+      console.log(result.referenceImages[Number(i)]);
     } else {
       console.log("No reference image.");
     }
