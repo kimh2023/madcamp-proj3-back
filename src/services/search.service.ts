@@ -13,6 +13,8 @@ import {
   projectId,
 } from "src/utils/visionSetup";
 
+import productService from "./product.service";
+
 const sharp = require("sharp");
 
 const search = async (file: Express.Multer.File) => {
@@ -130,12 +132,36 @@ const searchProducts = async (base64: string) => {
     requests: [searchRequest],
   });
   const results = response.responses[0].productSearchResults.results;
-  const parsedResults = results.map((result: ProductResponseDto) => ({
-    name: result.product.displayName,
-    category: result.product.productCategory,
-    score: result.score,
-    image: result.image.split("/")[-1],
-  }));
+
+  if (!results || !Array.isArray(results)) {
+    console.error("Invalid results array");
+    return [];
+  }
+
+  const parsedResults = await Promise.all(
+    results.map(async (result: ProductResponseDto) => {
+      const productResponse = await productService.getProduct(
+        Number(result.product.displayName),
+      );
+      console.log(
+        typeof Number(result.product.displayName),
+        Number(result.product.displayName),
+        productResponse,
+      );
+      if (productResponse.product === undefined) {
+        return null;
+      }
+      return {
+        id: productResponse.product._id,
+        name: productResponse.product.name,
+        score: result.score,
+        image: productResponse.product.image,
+        link: productResponse.product.link,
+        price: productResponse.product.price,
+        rating: productResponse.product.rating,
+      };
+    }),
+  );
 
   return parsedResults;
 };

@@ -16,16 +16,20 @@ export interface ProductResponseDto {
 }
 
 export interface ProductDto {
+  id: number;
   name: string;
-  category: string;
   score: number;
+  image: string;
+  link: string;
+  price: number;
+  rating: number;
 }
 
 export interface LocalizedObjectAnnotationDto {
   name: string;
   score: number;
   vertices: vertex[];
-  products?: ProductDto[];
+  products?: Array<ProductDto | null>;
 }
 
 export interface SearchResponseDto {
