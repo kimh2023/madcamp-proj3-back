@@ -16,7 +16,7 @@ enum UserType {
 }
 
 export enum InterestType {
-  FoodAndDrink = "Food And Drink",
+  FoodAndDrink = "Food and Drink",
   Technology = "Technology",
 }
 

@@ -9,5 +9,6 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PWD,
   database: process.env.DB_DATABASE,
   entities: [path.join(__dirname, "/entities/*.ts")],
-  synchronize: process.env.SYNCHRONIZE === "true",
+  synchronize:
+    process.env.SYNCHRONIZE === "true" || process.env.POPULATE === "true",
 });

@@ -19,6 +19,6 @@
     "declaration": true,
     "types": ["express"]
   },
-  "include": ["src/**/*", ".eslintrc.js"],
+  "include": ["src/**/*", ".eslintrc.js", "commitlint.config.js"],
   "exclude": ["node_modules"]
 }

@@ -30,6 +30,14 @@ const deleteUser: RequestHandlerDto = catchAsync(
   },
 );
 
-const userController = { getUser, updateUser, deleteUser };
+const getUserVerified: RequestHandlerDto = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const _id = Number(req.params.userId);
+    const response = await userService.getUserVerified(_id);
+    res.json(response);
+  },
+);
+
+const userController = { getUser, updateUser, deleteUser, getUserVerified };
 
 export default userController;

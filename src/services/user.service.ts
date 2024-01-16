@@ -2,6 +2,7 @@ import { validate } from "class-validator";
 import { type InterestType, type User } from "src/entities/user.entity";
 import { UserRepository } from "src/repositories";
 import {
+  type UserVerifiedResponseDto,
   type NewUserDto,
   type UserRequestDto,
   type UserResponseDto,
@@ -93,7 +94,30 @@ const deleteUser = async (_id: number): Promise<UserResponseDto> => {
   };
 };
 
-const userService = { createUser, getUser, updateUser, deleteUser };
+const getUserVerified = async (
+  _id: number,
+): Promise<UserVerifiedResponseDto> => {
+  const user = await UserRepository.findOne({
+    where: { _id },
+  });
+
+  if (user === null) {
+    return { success: false, message: "No such user.", isVerified: false };
+  }
+  return {
+    success: true,
+    message: "User retrieved",
+    isVerified: user.isVerified,
+  };
+};
+
+const userService = {
+  createUser,
+  getUser,
+  updateUser,
+  deleteUser,
+  getUserVerified,
+};
 
 export default userService;
 
