@@ -17,6 +17,59 @@ import productService from "./product.service";
 
 const sharp = require("sharp");
 
+const searchBase64 = async (base64Data: string) => {
+  const imageBuffer: Buffer = Buffer.from(base64Data, "base64");
+
+  const { width, height }: { width: number; height: number } =
+    await sharp(imageBuffer).metadata();
+
+  const localizationRequest = {
+    image: { content: imageBuffer.toString("base64") },
+  };
+
+  console.log(width, height, localizationRequest);
+
+  const [result] =
+    await imageAnnotatorClient.objectLocalization(localizationRequest);
+  const objects = result.localizedObjectAnnotations;
+
+  const promises = objects.map(async (object: any) => {
+    const oneResult: LocalizedObjectAnnotationDto = {
+      name: object.name,
+      score: object.score,
+      vertices: object.boundingPoly.normalizedVertices.map(
+        (v: { x: number; y: number }) => ({ x: v.x, y: v.y }),
+      ),
+    };
+
+    const vertices = object.boundingPoly.normalizedVertices;
+    const x1 = Math.floor(vertices[0].x * width);
+    const y1 = Math.floor(vertices[0].y * height);
+    const x2 = Math.floor(vertices[2].x * width);
+    const y2 = Math.floor(vertices[2].y * height);
+
+    try {
+      const croppedBuffer = await sharp(imageBuffer)
+        .extract({ left: x1, top: y1, width: x2 - x1, height: y2 - y1 })
+        .toBuffer();
+
+      const base64Image: string = croppedBuffer.toString("base64");
+      const products = await searchProducts(base64Image);
+
+      oneResult.products = products;
+      return oneResult;
+    } catch (err) {
+      console.error("Error processing image:", err);
+    }
+  });
+
+  const completeResults: SearchResponseDto = {
+    localizedObjectAnnotations: await Promise.all(promises),
+  };
+
+  return completeResults;
+};
+
 const search = async (file: Express.Multer.File) => {
   const imageBuffer = file.buffer;
 
@@ -168,6 +221,7 @@ const searchProducts = async (base64: string) => {
 
 const searchService = {
   search,
+  searchBase64,
 };
 
 export default searchService;
