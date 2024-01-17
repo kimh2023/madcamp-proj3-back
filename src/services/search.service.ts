@@ -18,6 +18,7 @@ import productService from "./product.service";
 const sharp = require("sharp");
 
 const search = async (
+  userId: number,
   file: Express.Multer.File,
 ): Promise<SearchResponseDto> => {
   try {
@@ -55,7 +56,7 @@ const search = async (
           .toBuffer();
 
         const base64Image: string = croppedBuffer.toString("base64");
-        const products = await searchProducts(base64Image);
+        const products = await searchProducts(userId, base64Image);
 
         oneResult.products = products;
         return oneResult;
@@ -75,7 +76,7 @@ const search = async (
   }
 };
 
-const searchProducts = async (base64: string) => {
+const searchProducts = async (userId: number, base64: string) => {
   const productSetPath = productSearchClient.productSetPath(
     projectId,
     location,
@@ -117,6 +118,9 @@ const searchProducts = async (base64: string) => {
       if (productResponse.product === undefined) {
         return null;
       }
+      const didIPin = productResponse.product.pins.some(
+        (pin) => pin.board.user._id === userId,
+      );
       return {
         id: productResponse.product._id,
         name: productResponse.product.name,
@@ -125,6 +129,7 @@ const searchProducts = async (base64: string) => {
         link: productResponse.product.link,
         price: productResponse.product.price,
         rating: productResponse.product.rating,
+        pinned: didIPin,
       };
     }),
   );
