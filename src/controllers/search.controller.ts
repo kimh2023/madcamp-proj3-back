@@ -6,12 +6,12 @@ const search: RequestHandlerDto = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const file = req.file;
     if (file === undefined) {
-      const response = await searchService.searchBase64(req.body.image);
+      res.status(400).json({ error: "No file uploaded" });
+    } else {
+      console.log("file");
+      const response = await searchService.search(file);
       res.json(response);
-      return;
     }
-    const response = await searchService.search(file);
-    res.json(response);
   },
 );
 

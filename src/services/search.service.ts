@@ -18,10 +18,23 @@ import productService from "./product.service";
 const sharp = require("sharp");
 
 const searchBase64 = async (base64Data: string) => {
+  console.log("CHECK1");
+
+  try {
+    const imageBuffer = Buffer.from(base64Data, "base64");
+  } catch (error: any) {
+    console.error("Error decoding base64 data:", error.message);
+    return;
+  }
+
   const imageBuffer: Buffer = Buffer.from(base64Data, "base64");
+
+  console.log("CHECK");
 
   const { width, height }: { width: number; height: number } =
     await sharp(imageBuffer).metadata();
+
+  console.log(width, height);
 
   const localizationRequest = {
     image: { content: imageBuffer.toString("base64") },
