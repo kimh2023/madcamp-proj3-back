@@ -136,6 +136,6 @@ const returnCompleteUser = (user: User) => {
   };
 };
 
-const returnBoards = (user: User) => {
+export const returnBoards = (user: User) => {
   return user.boards.map((board) => returnPartialBoard(board));
 };

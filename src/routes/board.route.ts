@@ -4,7 +4,10 @@ import { auth } from "src/middleware/auth";
 
 const router = express.Router();
 
-router.route("/").post(auth, boardController.createBoard);
+router
+  .route("/")
+  .get(auth, boardController.getAllBoards)
+  .post(auth, boardController.createBoard);
 
 router
   .route("/:boardId")
@@ -21,6 +24,16 @@ module.exports = router;
  *   description: "보드(핀 묶음) 관련 API"
  * paths:
  *   /boards:
+ *     get:
+ *       summary: "보드 가쟈오는 API, user는 없음...!!!"
+ *       tags: [Board]
+ *       responses:
+ *         200:
+ *           description: "성공적인 응답"
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: "#/components/schemas/UserResponse"
  *     post:
  *       summary: "보드 만드는 API"
  *       tags: [Board]

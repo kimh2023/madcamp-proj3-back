@@ -7,6 +7,7 @@ import {
 } from "src/types/board.types";
 
 import { returnPartialPins } from "./pin.service";
+import { returnBoards } from "./user.service";
 
 const createBoard = async (
   userId: number,
@@ -28,6 +29,22 @@ const createBoard = async (
     success: true,
     message: "Successful board creation",
     board: returnPartialBoard(board),
+  };
+};
+
+const getAllBoards = async (_id: number) => {
+  const user = await UserRepository.findOne({
+    where: { _id },
+    relations: ["boards", "boards"],
+  });
+
+  if (user === null) {
+    return { success: false, message: "No such user." };
+  }
+  return {
+    success: true,
+    message: "User retrieved",
+    boards: returnBoards(user),
   };
 };
 
@@ -81,7 +98,13 @@ const deleteBoard = async (_id: number): Promise<BoardResponseDto> => {
   };
 };
 
-const boardService = { createBoard, getBoard, updateBoard, deleteBoard };
+const boardService = {
+  createBoard,
+  getAllBoards,
+  getBoard,
+  updateBoard,
+  deleteBoard,
+};
 
 export default boardService;
 
