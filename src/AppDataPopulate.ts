@@ -1,8 +1,8 @@
 import path from "path";
 
+import { initData } from "./AppDataInit";
 import { Product } from "./entities/product.entity";
 import productService from "./services/product.service";
-import { downloadImageRetry, uploadImageRetry } from "./utils/uploadImages";
 
 const csvWriter = require("csv-write-stream");
 const fs = require("fs");
@@ -60,43 +60,44 @@ export const populateProducts = async () => {
         newProduct._id = index + 1;
         productService
           .createProduct(newProduct)
-          .then(
-            async (productResponse) =>
-              await downloadImageRetry(
-                productResponse,
-                productResponse.product.image,
-                0,
-              ),
-          )
-          .then(async (downloadResponse) => {
-            if (downloadResponse !== undefined) {
-              return await uploadImageRetry(
-                String(downloadResponse.productResponse.product._id),
-                downloadResponse.image,
-                0,
-              );
-            }
-          })
-          .then((imageUri) => {
-            if (imageUri !== undefined) {
-              const csvLine = {
-                "image-uri": imageUri,
-                "image-id": newProduct._id,
-                "product-set-id": "laptops",
-                "product-id": newProduct._id,
-                "product-category": "homegoods-v2",
-                "product-display-name": newProduct._id,
-                labels: "",
-                "bounding-poly": "",
-              };
-              csvWriteStream.write(csvLine);
-            }
-          })
+          // .then(
+          //   async (productResponse) =>
+          //     await downloadImageRetry(
+          //       productResponse,
+          //       productResponse.product.image,
+          //       0,
+          //     ),
+          // )
+          // .then(async (downloadResponse) => {
+          //   if (downloadResponse !== undefined) {
+          //     return await uploadImageRetry(
+          //       String(downloadResponse.productResponse.product._id),
+          //       downloadResponse.image,
+          //       0,
+          //     );
+          //   }
+          // })
+          // .then((imageUri) => {
+          //   if (imageUri !== undefined) {
+          //     const csvLine = {
+          //       "image-uri": imageUri,
+          //       "image-id": newProduct._id,
+          //       "product-set-id": "laptops",
+          //       "product-id": newProduct._id,
+          //       "product-category": "homegoods-v2",
+          //       "product-display-name": newProduct._id,
+          //       labels: "",
+          //       "bounding-poly": "",
+          //     };
+          //     csvWriteStream.write(csvLine);
+          //   }
+          // })
           .catch((error) => {
             console.error("Population error: ", error);
           });
       }),
     );
+    await initData();
   } catch (error) {
     console.error("Population error: ", error);
   }

@@ -33,5 +33,6 @@ export interface LocalizedObjectAnnotationDto {
 }
 
 export interface SearchResponseDto {
-  localizedObjectAnnotations: LocalizedObjectAnnotationDto[];
+  success: boolean;
+  localizedObjectAnnotations?: LocalizedObjectAnnotationDto[];
 }

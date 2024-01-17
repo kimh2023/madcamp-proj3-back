@@ -4,7 +4,7 @@ import { type PartialPinDto } from "./pin.types";
 
 export interface NewBoardDto {
   name: string;
-  user: User;
+  user: Partial<User>;
 }
 
 export interface PartialBoardDto {

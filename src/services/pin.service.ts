@@ -12,7 +12,6 @@ const createPin = async (
   productId: number,
   newPin: Partial<Pin>,
 ): Promise<PinResponseDto> => {
-  console.log(boardId, typeof boardId);
   const board = await BoardRepository.findOne({
     where: { _id: boardId },
   });

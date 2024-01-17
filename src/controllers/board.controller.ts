@@ -14,6 +14,14 @@ const createBoard: RequestHandlerDto = catchAsync(
   },
 );
 
+const getAllBoards: RequestHandlerDto = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = (req as any).user as number;
+    const response = await boardService.getAllBoards(userId);
+    res.json(response);
+  },
+);
+
 const getBoard: RequestHandlerDto = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const _id = Number(req.params.boardId);
@@ -41,6 +49,12 @@ const deleteBoard: RequestHandlerDto = catchAsync(
   },
 );
 
-const boardController = { createBoard, getBoard, updateBoard, deleteBoard };
+const boardController = {
+  createBoard,
+  getAllBoards,
+  getBoard,
+  updateBoard,
+  deleteBoard,
+};
 
 export default boardController;
