@@ -14,7 +14,7 @@ export interface PartialUserDto {
   id: number;
   email: string;
   name: string;
-  interest?: string;
+  interest?: InterestType;
 }
 
 /**
