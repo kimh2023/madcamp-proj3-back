@@ -14,6 +14,7 @@ const createProduct = async (newProduct: Partial<Product>) => {
 const getProduct = async (_id: number) => {
   const product = await ProductRepository.findOne({
     where: { _id },
+    relations: ["pins", "pins.board", "pins.board.user"],
   });
 
   if (product === null) {
